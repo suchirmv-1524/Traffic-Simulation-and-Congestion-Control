@@ -44,11 +44,11 @@ sunlight.shadow.camera.far = 500;
 // // Optional: Add helper to visualize shadow camera
 // const shadowHelper = new THREE.CameraHelper(sunlight.shadow.camera);
 // scene.add(shadowHelper);
-
-sunlight.shadow.bias = -0.001;  // Adjust this value as necessary
+sunlight.shadow.bias = -0.001;
 
 sunlight.shadow.mapSize.width = 4096;
 sunlight.shadow.mapSize.height = 4096;
+scene.add(sunlight);
 
 // Add Ground Plane to Receive Shadows
 const planeGeometry = new THREE.PlaneGeometry(1000, 1000);
@@ -85,8 +85,10 @@ function loadModel(name, path, scale, positionY = 0, counter = 0, callback) {
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
+                child.renderOrder = 1;
                 if (child.material) {
                     child.material = child.material.clone();
+                    child.material.depthWrite = true;
                 }
             }
         });
@@ -121,19 +123,19 @@ function loadModel(name, path, scale, positionY = 0, counter = 0, callback) {
 
 
 // Load Models with Appropriate Scales and Positions
-loadModel('Mustang','src/assets/shelby/scene.gltf', 450, 0,0, function() {
+loadModel('Mustang','/assets/shelby/scene.gltf', 450, 0,0, function() {
     console.log('Shelby loaded');
 });
-loadModel('Porsche','src/assets/porsche/scene.gltf', 5, 0.55,15, function() {
+loadModel('Porsche','/assets/porsche/scene.gltf', 5, 0.55,15, function() {
     console.log('Porsche loaded');
 });
-loadModel('Boxster','src/assets/boxster/scene.gltf', 1.35, 3.9,30, function() {
+loadModel('Boxster','/assets/boxster/scene.gltf', 1.35, 3.9,30, function() {
     console.log('Boxster loaded');
 });
-loadModel('Civic','src/assets/civic/scene.gltf', 500, 0,45, function() {
+loadModel('Civic','/assets/civic/scene.gltf', 500, 0,45, function() {
     console.log('Civic loaded');
 });
-loadModel('Focus','src/assets/focus/scene.gltf', 500, 0,60, function() {
+loadModel('Focus','/assets/focus/scene.gltf', 500, 0,60, function() {
     console.log('Focus loaded');
 });
 
@@ -141,7 +143,7 @@ loadModel('Focus','src/assets/focus/scene.gltf', 500, 0,60, function() {
 
 
 // Load OBJ Model
-objLoader.load('src/assets/USARoad.obj', function (obj) {
+objLoader.load('/assets/USARoad.obj', function (obj) {
     obj.scale.set(5, 5, 5); // Scale the model appropriately
     obj.position.set(0, 0, 0); // Position the model
     obj.rotation.x = -Math.PI / 2; // Rotate to lie flat
@@ -153,8 +155,10 @@ objLoader.load('src/assets/USARoad.obj', function (obj) {
         if (child.isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
+            child.renderOrder = 1;
             if (child.material) {
                 child.material = child.material.clone();
+                child.material.depthWrite = true;
             }
         }
     });
@@ -251,5 +255,3 @@ function animate() {
 }
 
 animate();
-
- 
